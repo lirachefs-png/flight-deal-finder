@@ -84,7 +84,9 @@ export async function GET(request: Request) {
                     operating_carrier: { name: "Simulated Air", iata_code: "SM" },
                     duration: "PT7H30M",
                     origin: { iata_code: origin },
-                    destination: { iata_code: destination }
+                    destination: { iata_code: destination },
+                    departing_at: `${departureDate}T10:00:00`,
+                    arriving_at: `${departureDate}T17:30:00`
                 }]
             }]
         }));
