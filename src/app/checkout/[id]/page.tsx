@@ -116,11 +116,15 @@ export default function CheckoutPage() {
             // --- SMART STRIPE KEY SWITCHING (FORCED KEYS) ---
             const isBRL = data.currency === 'BRL';
 
-            // HARDCODED KEYS AS REQUESTED (User provided via chat)
-            const PK_BR = 'pk_test_51SeKtlQ9stwXqujXpngTqEfw4chH9HbVwbxj5wWkHhkA3DpwBbXJg5bWMgOEINHjhzWa81odBCL1qYxZTbpG3S4L00yRGZe1I8';
-            const PK_EU = 'pk_test_51ScsbwK1rOlKvVgtZf94Vr6VSSubMWCOsMHDRmwM3R54ltvy9voWOGy4FYfJtWoZNz7OaiYI9PBEviXhYkJsCJZo000Qx9WMum';
+            // Use Env Var for Publishable Key
+            const stripeKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!;
 
-            const stripeKey = isBRL ? PK_BR : PK_EU;
+            if (!stripeKey) {
+                console.error("Stripe Publishable Key missing in env vars");
+                toast.error("Erro de configuração de pagamento (Chave Pública)");
+                setLoading(false);
+                return;
+            }
 
             setStripePromise(loadStripe(stripeKey));
 
