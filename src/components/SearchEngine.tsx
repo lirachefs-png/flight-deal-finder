@@ -317,6 +317,7 @@ export default function SearchEngine() {
     useEffect(() => {
         if (offers.length > 0) {
             // Extract unique airlines
+            const airlineCounts: { [key: string]: number } = {};
             offers.forEach(offer => {
                 const name = offer.owner?.name || 'Unknown Airline';
                 airlineCounts[name] = (airlineCounts[name] || 0) + 1;
