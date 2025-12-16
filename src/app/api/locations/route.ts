@@ -5,6 +5,11 @@ const STATIC_HUBS = [
     { iataCode: 'LIS', name: 'Humberto Delgado Airport', address: { cityName: 'Lisbon', countryName: 'Portugal' } },
     { iataCode: 'OPO', name: 'Francisco Sá Carneiro Airport', address: { cityName: 'Porto', countryName: 'Portugal' } },
     { iataCode: 'GRU', name: 'Guarulhos', address: { cityName: 'São Paulo', countryName: 'Brasil' } },
+    { iataCode: 'VCP', name: 'Viracopos', address: { cityName: 'Campinas', countryName: 'Brasil' } },
+    { iataCode: 'JPA', name: 'Castro Pinto', address: { cityName: 'João Pessoa', countryName: 'Brasil' } },
+    { iataCode: 'REC', name: 'Guararapes', address: { cityName: 'Recife', countryName: 'Brasil' } },
+    { iataCode: 'GIG', name: 'Galeão', address: { cityName: 'Rio de Janeiro', countryName: 'Brasil' } },
+    { iataCode: 'BSB', name: 'Pres. Juscelino Kubitschek', address: { cityName: 'Brasília', countryName: 'Brasil' } },
     { iataCode: 'JFK', name: 'John F. Kennedy', address: { cityName: 'New York', countryName: 'USA' } },
     { iataCode: 'LHR', name: 'Heathrow', address: { cityName: 'London', countryName: 'UK' } },
     { iataCode: 'CDG', name: 'Charles de Gaulle', address: { cityName: 'Paris', countryName: 'France' } }
@@ -17,9 +22,9 @@ export async function GET(request: Request) {
     if (!keyword || keyword.length < 2) return NextResponse.json({ data: [] });
 
     try {
-        // 1. DUFFEL CALL WITH 2s TIMEOUT
+        // 1. DUFFEL CALL WITH 5s TIMEOUT (Increased)
         const duffelPromise = (duffel as any).suggestions.list({ query: keyword, limit: 5 });
-        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 2000));
+        const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout")), 5000));
 
         const response = await Promise.race([duffelPromise, timeoutPromise]) as any;
         const places = response.data;
