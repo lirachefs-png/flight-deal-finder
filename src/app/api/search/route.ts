@@ -34,14 +34,18 @@ export async function GET(request: Request) {
 
         console.log(`⏱️ API Start: ${origin} -> ${destination}`);
 
-        // 1. DUFFEL CALL WITH 5s SOFT TIMEOUT
+        // DEBUG: Check if token is loaded (Safe Log)
+        const token = process.env.DUFFEL_ACCESS_TOKEN;
+        console.log(`🔑 Duffel Token Loaded: ${token ? 'YES (' + token.substring(0, 4) + '***)' : 'NO'}`);
+
+        // 1. DUFFEL CALL WITH 25s SOFT TIMEOUT (Increased for Sandbox Slowness)
         // Using user-recommended "Safe Race" pattern
         const duffelPromise = duffel.offerRequests.create(searchPayload);
 
         const offerRequest = await Promise.race([
             duffelPromise,
             new Promise((_, reject) =>
-                setTimeout(() => reject(new Error("Duffel timeout")), 5000)
+                setTimeout(() => reject(new Error("Duffel timeout (25s limit)")), 25000)
             )
         ]).catch((err) => {
             console.warn("⚠️ Soft Timeout/Error captured:", err.message);
