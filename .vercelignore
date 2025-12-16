@@ -1,0 +1,10 @@
+# Vercel Ignore
+node_modules/
+.next/
+safe/
+.git/
+.env.local
+.DS_Store
+coverage/
+.cache/
+SAFE_DEPLOY.bat
