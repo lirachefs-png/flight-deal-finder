@@ -51,7 +51,10 @@ export async function GET(request: Request) {
             h.address.cityName.toLowerCase().includes(keyword.toLowerCase())
         );
         return NextResponse.json({ data: fallback }, {
-            headers: { 'X-Fallback-Active': 'true' }
+            headers: {
+                'X-Fallback-Active': 'true',
+                'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=86400'
+            }
         });
     }
 }
