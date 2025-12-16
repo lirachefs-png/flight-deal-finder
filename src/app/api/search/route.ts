@@ -95,7 +95,13 @@ export async function GET(request: Request) {
                 warning: 'Live search unavailable, showing simulation.',
                 simulation: true
             },
-            { status: 200, headers: { 'X-Fallback-Active': 'true' } }
+            {
+                status: 200,
+                headers: {
+                    'X-Fallback-Active': 'true',
+                    'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=60'
+                }
+            }
         );
     }
 }
