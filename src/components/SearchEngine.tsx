@@ -317,9 +317,8 @@ export default function SearchEngine() {
     useEffect(() => {
         if (offers.length > 0) {
             // Extract unique airlines
-            const airlineCounts: { [key: string]: number } = {};
             offers.forEach(offer => {
-                const name = offer.owner.name;
+                const name = offer.owner?.name || 'Unknown Airline';
                 airlineCounts[name] = (airlineCounts[name] || 0) + 1;
             });
             const sortedAirlines = Object.entries(airlineCounts)
@@ -339,7 +338,7 @@ export default function SearchEngine() {
         if (isDirectOnly && stops > 0) return false;
 
         // 2. Airlines
-        if (selectedAirlines.length > 0 && !selectedAirlines.includes(offer.owner.name)) {
+        if (selectedAirlines.length > 0 && !selectedAirlines.includes(offer.owner?.name || '')) {
             return false;
         }
 
@@ -347,7 +346,10 @@ export default function SearchEngine() {
         // Morning: 06-12, Afternoon: 12-18, Evening: 18-24, Night: 00-06
         const isActiveTimeFilter = Object.values(timeFilters).some(v => v);
         if (isActiveTimeFilter) {
-            const departDate = new Date(slice.segments[0].departing_at);
+            const firstSegment = slice?.segments?.[0];
+            if (!firstSegment?.departing_at) return false;
+
+            const departDate = new Date(firstSegment.departing_at);
             const hour = departDate.getHours();
 
             let matches = false;
@@ -787,17 +789,23 @@ export default function SearchEngine() {
                             )}
 
                             {sortedOffers.map((offer, idx) => {
-                                const slice = offer.slices[0];
+                                const slice = offer.slices?.[0];
+                                if (!slice || !slice.segments?.length) return null; // Skip invalid offers
+
                                 const segments = slice.segments;
-                                const start = segments[0].departing_at;
-                                const end = segments[segments.length - 1].arriving_at;
+                                const start = segments[0]?.departing_at;
+                                const end = segments[segments.length - 1]?.arriving_at;
+
+                                if (!start || !end) return null; // Skip if dates missing
+
                                 const stops = segments.length - 1;
                                 const duration = getDuration(start, end);
                                 // NEW: Convert Price
-                                const { value: priceValue, currency: priceCurrency } = convertPrice(offer.total_amount, offer.total_currency, currency);
+                                const { value: priceValue, currency: priceCurrency } = convertPrice(offer.total_amount || 0, offer.total_currency || 'USD', currency);
 
                                 // Flight Number Logic
-                                const carrierCode = segments[0].marketing_carrier?.iata_code || segments[0].operating_carrier?.iata_code || offer.owner.iata_code || '??';
+                                const firstSeg = segments[0];
+                                const carrierCode = firstSeg?.marketing_carrier?.iata_code || firstSeg?.operating_carrier?.iata_code || offer.owner?.iata_code || '??';
                                 const flightNum = segments[0].marketing_carrier_flight_number || segments[0].operating_carrier_flight_number || '---';
 
                                 return (
