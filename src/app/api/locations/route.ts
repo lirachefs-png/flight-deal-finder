@@ -44,7 +44,17 @@ export async function GET(request: Request) {
             };
         }).filter((p: any) => p.iataCode);
 
-        return NextResponse.json({ data: transformedData }, {
+        let finalData = transformedData;
+
+        if (finalData.length === 0) {
+            const fallback = STATIC_HUBS.filter(h =>
+                h.iataCode.includes(keyword.toUpperCase()) ||
+                h.address.cityName.toLowerCase().includes(keyword.toLowerCase())
+            );
+            finalData = fallback;
+        }
+
+        return NextResponse.json({ data: finalData }, {
             headers: { 'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=86400' }
         });
 
