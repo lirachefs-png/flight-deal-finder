@@ -159,7 +159,7 @@ export default function Header() {
 
                     {/* DESKTOP MENU */}
                     <div className="hidden md:flex items-center gap-2 bg-zinc-100/50 px-2 py-1.5 rounded-full border border-zinc-200/50">
-                        <Link href="/stays" className={getLinkClass('/stays')}>{t('header.stays')}</Link>
+                        {/* <Link href="/stays" className={getLinkClass('/stays')}>{t('header.stays')}</Link> */}
                         <Link href="/" className={getLinkClass('/')}>{t('header.flights')}</Link>
                         <Link href="/ai-planner" className={`${getLinkClass('/ai-planner')} flex items-center gap-1`}>
                             <Sparkles className={`w-3 h-3 ${pathname === '/ai-planner' ? 'text-rose-500' : 'text-purple-500'}`} /> Maya AI
@@ -231,7 +231,7 @@ export default function Header() {
                 {/* MOBILE MENU DROPDOWN */}
                 {isMobileMenuOpen && (
                     <div className="md:hidden border-t border-zinc-100 bg-white px-6 py-4 flex flex-col gap-4 shadow-lg animate-in slide-in-from-top-5">
-                        <Link href="/stays" onClick={() => setIsMobileMenuOpen(false)} className={getMobileLinkClass('/stays')}>{t('header.stays')}</Link>
+                        {/* <Link href="/stays" onClick={() => setIsMobileMenuOpen(false)} className={getMobileLinkClass('/stays')}>{t('header.stays')}</Link> */}
                         <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className={getMobileLinkClass('/')}>{t('header.flights')}</Link>
                         <Link href="/ai-planner" onClick={() => setIsMobileMenuOpen(false)} className={`${getMobileLinkClass('/ai-planner')} flex items-center gap-2`}>
                             <Sparkles className="w-4 h-4 text-purple-500" /> Maya AI
