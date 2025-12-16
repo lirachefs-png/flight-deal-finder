@@ -55,9 +55,8 @@ export async function GET(request: Request) {
         }
 
         return NextResponse.json({ data: finalData }, {
-            headers: { 'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=86400' }
+            headers: { 'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=300' }
         });
-
     } catch (error: any) {
         console.warn("Locations API Slow/Fail. Serving Static Fallback.");
         // 2. FALLBACK: Filter Static List
@@ -68,7 +67,7 @@ export async function GET(request: Request) {
         return NextResponse.json({ data: fallback }, {
             headers: {
                 'X-Fallback-Active': 'true',
-                'Cache-Control': 'public, s-maxage=86400, stale-while-revalidate=86400'
+                'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=300'
             }
         });
     }
